@@ -17,11 +17,11 @@
 	<!-- JQuery -->
 	<script src="{% static 'user/js/jquery-3.4.1.min.js' %}"></script>
 	<!-- Your custom styles (optional) -->
-    <script src="{% static 'administration/js/jquery.timeago.js' %}"></script>
+	<script src="{% static 'administration/js/jquery.timeago.js' %}"></script>
 
 </head>
 
-<body class="fixed-sn white-skin">
+<body class="fixed-sn white-skin" style="overflow-x: hidden">
 
 	<!-- Main Navigation -->
 	<header>
@@ -85,51 +85,58 @@
 				<li class="nav-item dropdown notifications-nav">
 					<!-- <a class="nav-link dropdown-toggle waves-effect waves-light font-weight-bold orange-text" id="navbarDropdownMenuLink" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false"> -->
-					 <a class="nav-link dropdown-toggle orange-text" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span id="navbarNotificationCounter" class="badge rounded-pill badge-notification bg-danger" alt="Notifications" style=""></span>
-            <i class="fas fa-bell" alt="Notifications"></i>
-            <span class="d-none d-md-inline-block orange-text font-weight-bold">Notifications</span>
-          </a>
-           <div class="dropdown-menu orange-text" aria-labelledby="navbarDropdownMenuLink">
-            {% for notification in notifications %}
-            <form method="POST" autocomplete="off" enctype="multipart/form-data">
-          {% csrf_token %}
-            <a class="dropdown-item" href="#" id="notif{{notification.notification_id}}">
-              <i class="far fa-envelope mr-2" aria-hidden="true"></i>
-              <span>{{notification.content}}</span>
-              <span class="float-right" ><i class="far fa-clock" aria-hidden="true" ></i>
-                <span id='tt{{notification.notification_id}}'> </span>
-              </span>
-              <script type="text/javascript">
-               
-                 $("#navbarNotificationCounter").html({{forloop.counter}}); 
-                 var then = jQuery.timeago(new Date("{{notification.date|date:"c"}}"));
-                    $("#tt{{notification.notification_id}}").html(then); 
+					<a class="nav-link dropdown-toggle orange-text" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span id="navbarNotificationCounter" class="badge rounded-pill badge-notification bg-danger" alt="Notifications" style=""></span>
+						<i class="fas fa-bell" alt="Notifications"></i>
+						<span class="d-none d-md-inline-block orange-text font-weight-bold">Notifications</span>
+					</a>
+					<div class="dropdown-menu orange-text" aria-labelledby="navbarDropdownMenuLink">
+						{% for notification in notifications %}
+						<form method="POST" autocomplete="off" enctype="multipart/form-data">
+							{% csrf_token %}
+							<a class="dropdown-item" href="#" id="notif{{notification.notification_id}}">
+								<i class="far fa-envelope mr-2" aria-hidden="true"></i>
+								<span>{{notification.content}}</span>
+								<span class="float-right"><i class="far fa-clock" aria-hidden="true"></i>
+									<span id='tt{{notification.notification_id}}'> </span>
+								</span>
+								<script type="text/javascript">
+									$("#navbarNotificationCounter").html({
+										{
+											forloop.counter
+										}
+									});
+									var then = jQuery.timeago(new Date("{{notification.date|date:"
+										c "}}"));
+									$("#tt{{notification.notification_id}}").html(then);
 
 
-$( "#notif{{notification.notification_id}}" ).click(function(e) {
-   $.ajax({
-        type:'POST',
-        url:" ",
-        data:{
-        notification_id: {{notification.notification_id}},
-        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
-        action: 'notifRead'
-        },
-        success:function(json){
-            window.location.replace("{% url 'user:request_view' %}");
-        },
-        error : function(xhr,errmsg,err) {
-        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-    }
-    });
-})
-
-</script>
-              </form>
-              {% endfor %}
-            </a>
-          </div>
+									$("#notif{{notification.notification_id}}").click(function(e) {
+										$.ajax({
+											type: 'POST',
+											url: " ",
+											data: {
+												notification_id: {
+													{
+														notification.notification_id
+													}
+												},
+												csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+												action: 'notifRead'
+											},
+											success: function(json) {
+												window.location.replace("{% url 'user:request_view' %}");
+											},
+											error: function(xhr, errmsg, err) {
+												console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+											}
+										});
+									})
+								</script>
+						</form>
+						{% endfor %}
+						</a>
+					</div>
 				</li>
 
 				<li class="nav-item">
@@ -526,7 +533,10 @@ $( "#logout" ).click(function(e) {
 								<!-- Text -->
 								<p class="card-text"><i class="fas fa-calendar"></i>
 									{{notjoin.date}} @ {{notjoin.time}}<br><i class="fas fa-map-pin"></i> {{notjoin.location}} <br><br>
+
+									<textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="5" style="border: transparent; font-size: 14px">
 									{{notjoin.description}}
+									</textarea>
 								</p>
 
 							</div>
@@ -600,7 +610,6 @@ $( "#logout" ).click(function(e) {
 
 		// for (var i = 0; i < 7; i++)
 		//   $("#demo").append(myvar);
-
 	</script>
 
 
@@ -759,7 +768,6 @@ $( "#logout" ).click(function(e) {
 			wheelPropagation: true,
 			minScrollbarLength: 20
 		});
-
 	</script>
 
 
