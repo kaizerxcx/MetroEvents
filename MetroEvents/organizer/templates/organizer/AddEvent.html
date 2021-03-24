@@ -1,0 +1,523 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>Home</title>
+	<link rel="shortcut icon" href="{% static 'user/img/MetroLogo.png' %}" />
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="{% static 'organizer/css/bootstrap.min.css' %}">
+	<!-- Material Design Bootstrap -->
+	<link rel="stylesheet" href="{% static 'organizer/css/mdb.min.css' %}">
+	<!-- JQuery -->
+	<script src="{% static 'organizer/js/jquery-3.4.1.min.js' %}"></script>
+		<script src="{% static 'administration/js/jquery.timeago.js' %}"></script>
+	<script src="{% static 'administration/js/jquery.timeago.js' %}"></script>
+
+	<!-- Your custom styles (optional) -->
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
+	<script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
+	<link rel="stylesheet" href="{%static 'user/css/activities.css'%}">
+</head>
+
+<body class="fixed-sn white-skin">
+
+	<!-- Main Navigation -->
+	<header>
+
+		<!-- Sidebar navigation -->
+		<div id="slide-out" class="side-nav  fixed">
+			<ul class="custom-scrollbar">
+
+				<!-- Logo -->
+				<li class="logo-sn waves-effect py-3" style="height: 93px">
+					<div class="p-4 ">
+						<div class="d-flex flex-row align-items-stretch ">
+							<img src="{% static 'user/img/MetroLogo4.png' %}" alt=" " height="52 " width="193 ">
+						</div>
+					</div>
+				</li>
+
+				<hr>
+
+
+				<!-- Side navigation links -->
+				<li>
+					<ul class="collapsible collapsible-accordion">
+						<li>
+							<a href="{% url 'user:organizer_view' %}" class="collapsible-header waves-effect orange-text font-weight-bold"><i class="fas fa-calendar-alt orange-text"></i>Discover Events</a>
+						</li>
+						<li>
+							<a href="{% url 'organizer:addEvent_view' %}" class="collapsible-header waves-effect orange-text font-weight-bold"><i class="fas fa-plus" style="color: orange"></i>Add Events</a>
+						</li>
+						<li>
+							<a href="{% url 'organizer:createdEvents_view' %}" class="collapsible-header waves-effect orange-text font-weight-bold"><i class="fas fa-folder-open" style="color: orange"></i>Created Events</a>
+						</li>
+				<!-- 		<li>
+							<a href="{% url 'organizer:manageParticipants_view' %}" class="collapsible-header waves-effect orange-text font-weight-bold"><i class="fas fa-users" style="color: orange"></i>Manage Participants</a>
+						</li> -->
+						<li>
+							<a href="{% url 'organizer:myevents_view' %}" class="collapsible-header waves-effect orange-text font-weight-bold"><i class="w-fa far fa-calendar-check orange-text"></i>My Events</a>
+						</li>
+
+					</ul>
+				</li>
+				<!-- Side navigation links -->
+
+			</ul>
+			<div class="sidenav-bg mask-strong"></div>
+		</div>
+		<!-- Sidebar navigation -->
+
+		<!-- Navbar -->
+		<nav class="navbar fixed-top navbar-expand-lg scrolling-navbar double-nav">
+
+			<!-- SideNav slide-out button -->
+			<div class="float-left">
+				<a href="#" data-activates="slide-out" class="button-collapse"><i class="fas fa-bars orange-text"></i></a>
+			</div>
+
+			<!-- Breadcrumb -->
+			<div class="breadcrumb-dn mr-auto orange-text">
+				<p class="font-weight-bold" style="color: orange"> Home</p>
+				<input type="text" id="user_id" value="{{user_id}}" hidden="">
+				<a href="{% url 'user:welcome_view' %}" id="homeLink" hidden=""></a>
+			</div>
+
+			<!-- Navbar links -->
+			<ul class="nav navbar-nav nav-flex-icons ml-auto">
+
+				<!-- Dropdown -->
+				<li class="nav-item dropdown notifications-nav">
+					<!-- <a class="nav-link dropdown-toggle waves-effect waves-light font-weight-bold orange-text" id="navbarDropdownMenuLink" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false"> -->
+					<a class="nav-link dropdown-toggle orange-text" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span id="navbarNotificationCounter" class="badge rounded-pill badge-notification bg-danger" alt="Notifications" style=""></span>
+						<i class="fas fa-bell" alt="Notifications"></i>
+						<span class="d-none d-md-inline-block orange-text font-weight-bold">Notifications</span>
+					</a>
+					<div class="dropdown-menu orange-text" aria-labelledby="navbarDropdownMenuLink">
+						{% for notification in notifications %}
+						<form method="POST" autocomplete="off" enctype="multipart/form-data">
+							{% csrf_token %}
+							<a class="dropdown-item" href="#" id="notif{{notification.notification_id}}">
+								<i class="far fa-envelope mr-2" aria-hidden="true"></i>
+								<span>{{notification.content}}</span>
+								<span class="float-right"><i class="far fa-clock" aria-hidden="true"></i>
+									<span id='tt{{notification.notification_id}}'> </span>
+								</span>
+<script type="text/javascript">
+               
+                 $("#navbarNotificationCounter").html({{forloop.counter}}); 
+                 var then = jQuery.timeago(new Date("{{notification.date|date:"c"}}"));
+                    $("#tt{{notification.notification_id}}").html(then); 
+
+
+$( "#notif{{notification.notification_id}}" ).click(function(e) {
+   $.ajax({
+        type:'POST',
+        url:" ",
+        data:{
+        notification_id: {{notification.notification_id}},
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        action: 'notifRead'
+        },
+        success:function(json){
+            window.location.replace("{% url 'organizer:createdEvents_view' %}");
+        },
+        error : function(xhr,errmsg,err) {
+        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    }
+    });
+})
+
+</script>
+						</form>
+						{% endfor %}
+						</a>
+					</div>
+				</li>
+				<li class="nav-item">
+					<a href="{% url 'organizer:myevents_view' %}" class="nav-link waves-effect"><i class="w-fa far fa-calendar-check orange-text"></i> <span class="clearfix d-none d-sm-inline-block orange-text font-weight-bold">My Events</span></a>
+				</li>
+
+				<li class="nav-item dropdown orange-text">
+					<a class="nav-link orange-text" href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-user orange-text"></i> <span class="clearfix d-none d-sm-inline-block orange-text font-weight-bold">Profile</span>
+					</a>
+					<form method="POST" autocomplete="off" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="dropdown-menu dropdown-menu-right " aria-labelledby="userDropdown">
+						<a class="dropdown-item" id="logout">Log Out</a>
+					</form>
+<script type="text/javascript">
+
+
+$( "#logout" ).click(function(e) {
+//	window.location.replace("{% url 'user:welcome_view' %}");
+   $.ajax({
+        type:'POST',
+        url:" ",
+        data:{
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        action: 'logout'
+        },
+        success:function(json){
+            window.location.replace("{% url 'user:welcome_view' %}");
+        },
+        error : function(xhr,errmsg,err) {
+        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    }
+    });
+})
+
+
+</script>
+						<a class="dropdown-item" href="#">My Account</a>
+					</div>
+				</li>
+
+			</ul>
+			<!-- Navbar links -->
+
+		</nav>
+
+
+	</header>
+	<!-- Main Navigation -->
+
+
+	<!-- Main layout -->
+	<!-- Navbar -->
+
+	<nav class="navbar navbar-expand-lg navbar-dark primary-color mb-5">
+
+		<div class="container">
+
+			<!-- Navbar links -->
+			<ul class="nav navbar-nav nav-flex-icons mr-auto">
+
+				<li class="nav-item">
+					<a class="nav-link waves-effect"></i> <span class="clearfix d-none d-sm-inline-block white-text font-weight-bold">Concerts</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link waves-effect"></i> <span class="clearfix d-none d-sm-inline-block white-text font-weight-bold">Sports</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link waves-effect"></i> <span class="clearfix d-none d-sm-inline-block white-text font-weight-bold">Arts & Theater</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link waves-effect"></i> <span class="clearfix d-none d-sm-inline-block white-text font-weight-bold">Family</span></a>
+				</li>
+				<!-- Dropdown -->
+				<li class="nav-item dropdown notifications-nav">
+					<a class="nav-link dropdown-toggle white-text" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="d-none d-md-inline-block font-weight-bold">More</span>
+					</a>
+					<div class="dropdown-menu orange-text" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item" href="#">
+							<span>Webinars</span>
+						</a>
+						<a class="dropdown-item" href="#">
+							<span>Parties</span>
+						</a>
+						<a class="dropdown-item" href="#">
+							<span>Others</span>
+						</a>
+					</div>
+				</li>
+
+			</ul>
+
+			<!-- Search form -->
+
+
+			<div class="form-group md-form my-0 waves-light">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+
+
+		</div>
+		<!-- Collapsible content -->
+
+		</div>
+
+	</nav>
+	<!-- Navbar -->
+	<!-- Second column -->
+	<div class="lg-8 d-flex justify-content-center">
+
+		<!-- Card -->
+		<div class="card card-cascade narrower">
+
+			<!-- Card image -->
+			<div class="view view-cascade card-header lighten-3" style="background-color: orange">
+				<h5 class="mb-0 font-weight-bold" style="color: white; text-align: center">Add Event</h5>
+			</div>
+			<!-- Card image -->
+
+			<!-- Card content -->
+			<div class="card-body card-body-cascade text-center">
+
+				<!-- Edit Form -->
+
+				<!-- First row -->
+				<form method="POST" autocomplete="off" enctype="multipart/form-data" style="width: 400px">
+					{% csrf_token %}
+					<div class="row">
+						<!-- First column -->
+						<div class="col">
+							<div class="md-form mb-0">
+								<input type="text" id="form1" class="form-control validate" required="" name="event_title">
+								<label for="form1" data-error="wrong" data-success="right">Event Title</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<!-- Second column -->
+						<div class="col">
+							<div class="md-form mb-0">
+								<input type="text" name="location" id="form82" class="form-control validate" required="">
+								<label for="form82" data-error="wrong" data-success="right">Location</label>
+							</div>
+						</div>
+					</div>
+					<!-- First row -->
+
+					<!-- First row -->
+					<div class="row">
+						<!-- First column -->
+						<div class="col-md-6">
+							<div class="md-form mb-0">
+								<input type="Time" name="time" id="form81" class="form-control validate" required="">
+								<label for="form81" data-error="wrong" data-success="right">Time</label>
+							</div>
+						</div>
+
+						<!-- Second column -->
+						<div class="col-md-6">
+							<div class="md-form mb-0">
+								<input type="date" id="DateField" name="date" class="form-control validate">
+								<label for="form2" data-error="wrong" data-success="right">Date</label>
+								<script type="text/javascript">
+									document.getElementById('DateField').valueAsDate = new Date();
+									console.log(new Date());
+
+								</script>
+								</script>
+							</div>
+						</div>
+					</div>
+					<!-- First row -->
+
+					<!-- Second row -->
+					<!--    <div class="row">
+ -->
+					<!-- First column -->
+					<!--     <div class="col-md-6">
+                      <div class="md-form mb-0">
+                        <input type="email" id="form76" class="form-control validate">
+                        <label for="form76">Email address</label>
+                      </div>
+                    </div> -->
+					<!-- Second column -->
+
+					<!--        <div class="col-md-6">
+                      <div class="md-form mb-0">
+                        <input type="text" id="form77" class="form-control validate">
+                        <label for="form77" data-error="wrong" data-success="right">Website Address</label>
+                      </div>
+                    </div>
+                  </div> -->
+					<!-- Second row -->
+
+					<!-- Third row -->
+					<div class="row">
+
+						<!-- First column -->
+						<div class="col-md-12">
+							<div class="md-form mb-0">
+								<textarea type="text" name="description" id="form78" class="md-textarea form-control" rows="3"></textarea>
+								<label for="form78">Description</label>
+							</div>
+						</div>
+					</div>
+					<!-- Third row -->
+					<!-- Fourth row -->
+					<div class="row">
+						<div class="col-md-6">
+							<div class="md-form mb-0">
+								<label for="Type">Type:</label>
+								<select class="ml-2 mr-2 select-activities" name="event_type" aria-label="Type" style="padding-top: 13px; padding-left: 50px; color: orange">
+									<option value="Concerts" selected>Concerts</option>
+									<option value="Sports">Sports</option>
+									<option value="Arts and Theater">Arts and Theather</option>
+									<option value="Family">Family</option>
+									<option value="Webinars">Webinars</option>
+									<option value="Parties">Parties</option>
+									<option value="Others">Others</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<!-- Fourth row -->
+
+					<!-- Fourth row -->
+					<div class="row">
+						<div class="col-md-12 text-center my-4">
+							<input type="submit" value="Create Event" class="btn btn" style="background-color: orange; color: white">
+						</div>
+					</div>
+					<!-- Fourth row -->
+					<input type="text" id="user_id" value="{{organizer_id}}" name="org_id" hidden="">
+
+				</form>
+				<!-- Edit Form -->
+
+			</div>
+			<!-- Card content -->
+
+		</div>
+		<!-- Card -->
+
+	</div>
+	<!-- Second column -->
+
+	<script>
+		var myvar = '<!-- Card -->' +
+			'            <div class="col-lg-3 col-md-6 mb-4" >' +
+			'              <div class="card card-cascade narrower mb-5">' +
+			'' +
+			'                <!-- Card image -->' +
+			'                <div class="view view-cascade overlay d-flex justify-content-center">' +
+			'                  <img src="https://mdbootstrap.com/img/Mockups/Horizontal/6-col/pro-profile-page.jpg" class="img-fluid"' +
+			'                    alt="">' +
+			'                  <a href="#">' +
+			'                    <div class="mask"></div>' +
+			'                  </a>' +
+			'                </div>' +
+			'' +
+			'                <!-- Card content -->' +
+			'                <div class="card-body card-body-cascade">' +
+			'' +
+			'                  <!-- Title -->' +
+			'                  <h4 class="card-title">Project name</h4>' +
+			'' +
+			'                  <!-- Text -->' +
+			'                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the' +
+			'                    card\'s' +
+			'                    content.' +
+			'                  </p>' +
+			'' +
+			'                </div>' +
+			'' +
+			'                <!-- Card footer -->' +
+			'                <div class="card-footer links-light">' +
+			'                  <span class="float-left pt-2">' +
+			'                    <a><i class="fas fa-long-arrow-alt-up green-text"></i> 1</a>' +
+			'                    <a><i class="fas fa-long-arrow-alt-down red-text"></i> 10</a>' +
+			'                  </span>' +
+			'                  <span class="float-right">' +
+			'                    <a href="" class="waves-effect p-2">Comments <i class="far fa-comment-alt"></i></a>' +
+			'                  </span>' +
+			'                </div>' +
+			'' +
+			'             </div>' +
+			'              </div>' +
+			'              <!-- Card -->';
+
+
+		for (var i = 0; i < 7; i++)
+			$("#demo").append(myvar);
+
+	</script>
+
+
+
+	<main>
+	</main>
+	<!-- Main layout -->
+
+	<!-- Footer -->
+	<footer class="page-footer pt-0  orange">
+
+		<!-- Copyright -->
+		<div class="footer-copyright py-3 text-center orange">
+			<div class="container-fluid" style="color: white">
+				© 2021 Copyright: <a href="#" target="_blank" style="font-weight:bold">Metro Events </a>
+			</div>
+		</div>
+
+	</footer>
+	<!-- Footer -->
+
+	<!-- SCRIPTS -->
+	<!-- JQuery -->
+	<script src="{% static 'organizer/js/jquery-3.4.1.min.js' %}"></script>
+	<!-- Bootstrap tooltips -->
+	<script type="text/javascript" src="{% static 'organizer/js/popper.min.js' %}"></script>
+	<!-- Bootstrap core JavaScript -->
+	<script type="text/javascript" src="{% static 'organizer/js/bootstrap.js' %}"></script>
+	<!-- MDB core JavaScript -->
+	<script type="text/javascript" src="{% static 'organizer/js/mdb.min.js' %}"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/b-1.6.5/b-html5-1.6.5/datatables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+	<script src="{%static 'user/js/request.js'%}"></script>
+	<!--   <script type="text/javascript" src="{% static 'organizer/js/Organizer.js' %}"></script>
+ -->
+	<!-- Initializations -->
+	<script>
+		$.ajaxSetup({
+			beforeSend: function(xhr, settings) {
+				function getCookie(name) {
+					var cookieValue = null;
+					if (document.cookie && document.cookie != '') {
+						var cookies = document.cookie.split(';');
+						for (var i = 0; i < cookies.length; i++) {
+							var cookie = jQuery.trim(cookies[i]);
+							// Does this cookie string begin with the name we want?
+							if (cookie.substring(0, name.length + 1) == (name + '=')) {
+								cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+								break;
+							}
+						}
+					}
+					return cookieValue;
+				}
+				if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+					// Only send the token to relative URLs i.e. locally.
+					xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+				}
+			}
+		});
+
+
+		// SideNav Initialization
+		$(".button-collapse").sideNav();
+
+		var container = document.querySelector('.custom-scrollbar');
+		var ps = new PerfectScrollbar(container, {
+			wheelSpeed: 2,
+			wheelPropagation: true,
+			minScrollbarLength: 20
+		});
+
+	</script>
+
+
+
+</body>
+
+</html>

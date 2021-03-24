@@ -1,0 +1,495 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>Home</title>
+	<link rel="shortcut icon" href="{% static 'user/img/MetroLogo.png' %}" />
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="{% static 'administration/css/bootstrap.min.css' %}">
+	<!-- Material Design Bootstrap -->
+	<link rel="stylesheet" href="{% static 'administration/css/mdb.min.css' %}">
+	<!-- JQuery -->
+	<script src="{% static 'administration/js/jquery-3.4.1.min.js' %}"></script>
+	<script src="{% static 'administration/js/jquery.timeago.js' %}"></script>
+
+	<!-- Your custom styles (optional) -->
+	<style>
+
+	</style>
+</head>
+
+<body class="fixed-sn white-skin">
+
+	<!-- Main Navigation -->
+	<header>
+
+		<!-- Sidebar navigation -->
+		<div id="slide-out" class="side-nav  fixed">
+			<ul class="custom-scrollbar">
+
+				<!-- Logo -->
+				<li class="logo-sn waves-effect py-3" style="height: 93px">
+					<div class="p-4 ">
+						<div class="d-flex flex-row align-items-stretch ">
+							<img src="{% static 'user/img/MetroLogo4.png' %}" alt=" " height="52 " width="193 ">
+						</div>
+					</div>
+				</li>
+
+				<hr>
+
+
+				<!-- Side navigation links -->
+				<li>
+					<ul class="collapsible collapsible-accordion">
+						<li>
+							<a href="{% url 'user:organizer_view' %}" class="collapsible-header waves-effect orange-text font-weight-bold"><i class="fas fa-calendar-alt orange-text"></i>Discover Events</a>
+						</li>
+						<li>
+							<a href="{% url 'organizer:addEvent_view' %}" class="collapsible-header waves-effect orange-text font-weight-bold"><i class="fas fa-plus"></i>Add Events</a>
+						</li>
+						<li>
+							<a href="{% url 'organizer:createdEvents_view' %}" class="collapsible-header waves-effect orange-text font-weight-bold"><i class="fas fa-folder-open" style="color: orange"></i>Created Events</a>
+						</li>
+					<!-- 	<li>
+							<a href="{% url 'organizer:manageParticipants_view' %}" class="collapsible-header waves-effect orange-text font-weight-bold"><i class="fas fa-users"></i>Manage Participants</a>
+						</li> -->
+						<li>
+							<a href="{% url 'organizer:myevents_view' %}" class="collapsible-header waves-effect orange-text font-weight-bold"><i class="w-fa far fa-calendar-check orange-text"></i>My Events</a>
+						</li>
+
+					</ul>
+				</li>
+				<!-- Side navigation links -->
+
+			</ul>
+			<div class="sidenav-bg mask-strong"></div>
+		</div>
+		<!-- Sidebar navigation -->
+
+
+		<!-- Navbar -->
+		<nav class="navbar fixed-top navbar-expand-lg scrolling-navbar double-nav">
+
+			<!-- SideNav slide-out button -->
+			<div class="float-left">
+				<a href="#" data-activates="slide-out" class="button-collapse"><i class="fas fa-bars orange-text"></i></a>
+			</div>
+
+			<!-- Breadcrumb -->
+			<div class="breadcrumb-dn mr-auto orange-text">
+				<p class="font-weight-bold"> Home</p>
+				<!--         <input type="text" id="user_id" value="{{user_id}}" hidden="">
+ --> <a href="{% url 'user:welcome_view' %}" id="homeLink" hidden=""></a>
+			</div>
+
+			<!-- Navbar links -->
+			<ul class="nav navbar-nav nav-flex-icons ml-auto">
+
+				<!-- Dropdown -->
+				<li class="nav-item dropdown notifications-nav">
+					<!-- <a class="nav-link dropdown-toggle waves-effect waves-light font-weight-bold orange-text" id="navbarDropdownMenuLink" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false"> -->
+					<a class="nav-link dropdown-toggle orange-text" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span id="navbarNotificationCounter" class="badge rounded-pill badge-notification bg-danger" alt="Notifications" style=""></span>
+						<i class="fas fa-bell" alt="Notifications"></i>
+						<span class="d-none d-md-inline-block orange-text font-weight-bold">Notifications</span>
+					</a>
+					<div class="dropdown-menu orange-text" aria-labelledby="navbarDropdownMenuLink">
+						{% for notification in notifications %}
+						<form method="POST" autocomplete="off" enctype="multipart/form-data">
+							{% csrf_token %}
+							<a class="dropdown-item" href="#" id="notif{{notification.notification_id}}">
+								<i class="far fa-envelope mr-2" aria-hidden="true"></i>
+								<span>{{notification.content}}</span>
+								<span class="float-right"><i class="far fa-clock" aria-hidden="true"></i>
+									<span id='tt{{notification.notification_id}}'> </span>
+								</span>
+<script type="text/javascript">
+               
+                 $("#navbarNotificationCounter").html({{forloop.counter}}); 
+                 var then = jQuery.timeago(new Date("{{notification.date|date:"c"}}"));
+                    $("#tt{{notification.notification_id}}").html(then); 
+
+
+$( "#notif{{notification.notification_id}}" ).click(function(e) {
+   $.ajax({
+        type:'POST',
+        url:" ",
+        data:{
+        notification_id: {{notification.notification_id}},
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        action: 'notifRead'
+        },
+        success:function(json){
+           window.location.replace("{% url 'organizer:createdEvents_view' %}");
+        },
+        error : function(xhr,errmsg,err) {
+        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    }
+    });
+})
+
+</script>
+						</form>
+						{% endfor %}
+						</a>
+					</div>
+				</li>
+				<li class="nav-item">
+					<a href="{% url 'administration:myEvents_view' %}" class="nav-link waves-effect"><i class="w-fa far fa-calendar-check orange-text"></i> <span class="clearfix d-none d-sm-inline-block orange-text font-weight-bold">My Events</span></a>
+				</li>
+
+				<li class="nav-item dropdown orange-text">
+					<a class="nav-link orange-text" href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-user orange-text"></i> <span class="clearfix d-none d-sm-inline-block orange-text font-weight-bold">Profile</span>
+					</a>
+					<form method="POST" autocomplete="off" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="dropdown-menu dropdown-menu-right " aria-labelledby="userDropdown">
+						<a class="dropdown-item" id="logout">Log Out</a>
+					</form>
+<script type="text/javascript">
+
+
+$( "#logout" ).click(function(e) {
+//	window.location.replace("{% url 'user:welcome_view' %}");
+   $.ajax({
+        type:'POST',
+        url:" ",
+        data:{
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        action: 'logout'
+        },
+        success:function(json){
+            window.location.replace("{% url 'user:welcome_view' %}");
+        },
+        error : function(xhr,errmsg,err) {
+        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    }
+    });
+})
+
+
+</script>
+						<a class="dropdown-item" href="#">My Account</a>
+					</div>
+				</li>
+
+			</ul>
+			<!-- Navbar links -->
+		</nav>
+
+
+	</header>
+	<!-- Main Navigation -->
+
+	<!-- Carousel Wrapper -->
+	<div id="carousel-example-1z" class="carousel slide carousel-fade black" data-ride="carousel">
+
+
+	</div>
+
+	<!-- Carousel Wrapper -->
+	<!-- Main layout -->
+	<!-- Navbar -->
+
+	<nav class="navbar navbar-expand-lg navbar-dark primary-color mb-5">
+
+		<div class="container">
+
+			<!-- Navbar links -->
+			<ul class="nav navbar-nav nav-flex-icons mr-auto">
+
+				<li class="nav-item">
+					<a class="nav-link waves-effect"></i> <span class="clearfix d-none d-sm-inline-block white-text font-weight-bold">Concerts</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link waves-effect"></i> <span class="clearfix d-none d-sm-inline-block white-text font-weight-bold">Sports</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link waves-effect"></i> <span class="clearfix d-none d-sm-inline-block white-text font-weight-bold">Arts & Theater</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link waves-effect"></i> <span class="clearfix d-none d-sm-inline-block white-text font-weight-bold">Family</span></a>
+				</li>
+				<!-- Dropdown -->
+				<li class="nav-item dropdown notifications-nav">
+					<a class="nav-link dropdown-toggle white-text" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="d-none d-md-inline-block font-weight-bold">More</span>
+					</a>
+					<div class="dropdown-menu orange-text" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item" href="#">
+							<span>Webinars</span>
+						</a>
+						<a class="dropdown-item" href="#">
+							<span>Parties</span>
+						</a>
+						<a class="dropdown-item" href="#">
+							<span>Others</span>
+						</a>
+					</div>
+				</li>
+
+			</ul>
+
+			<!-- Search form -->
+			<form class="search-form" role="search">
+
+				<div class="form-group md-form my-0 waves-light">
+					<input type="text" class="form-control" placeholder="Search">
+				</div>
+
+			</form>
+
+		</div>
+		<!-- Collapsible content -->
+
+		</div>
+
+	</nav>
+	<!-- Navbar -->
+
+
+	<div class="row pl-5 pr-5 mt-2">
+					<div class="col-12 mt-3">
+						<h1 style="font-weight: 700; text-align: center">Joined Events</h1>
+						<br>
+					</div>
+				</div>
+	<div class="d-flex flex-row bd-highlight mb-3">
+
+		{% for event in events %}
+
+		<form method="POST" autocomplete="off" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="p-2 bd-highlight">
+				<div class="card card-cascade narrower mb-5" style="width: 290px; height: auto">
+
+					<!-- Card image -->
+					<div class="view view-cascade overlay d-flex justify-content-center">
+						<img src="{% static 'user/img/MetroEventsLanding.jpg'%}" class="img-fluid" alt="">
+						<a href="#">
+							<div class="mask"></div>
+						</a>
+					</div>
+					<!-- Card content -->
+					<div class="card-body card-body-cascade">
+
+						<!-- Title -->
+						<h4 class="card-title">{{event.title}}</h4>
+
+						<!-- Text -->
+						<p class="card-text"><i class="fas fa-calendar"></i>
+							{{event.date}} @ {{event.time}}<br><i class="fas fa-map-pin"></i> {{event.location}} <br>
+
+							<textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="5" style="border: transparent; font-size: 14px">
+							{{event.description}}
+							</textarea>
+						</p>
+
+					</div>
+
+					<!-- Card footer -->
+					<div class="card-footer links-light">
+						<span class="float-left pt-2">
+							<a><i class="fas fa-long-arrow-alt-up green-text"></i>{{event.upvotes}}</a>
+							<a><i class="fas fa-long-arrow-alt-down red-text"></i>{{event.downvotes}}</a>
+						</span>
+						<span class="float-right">
+							<button type="submit" class="waves-effect p-2" id="addBtn" style="color: white; border-radius: 4px; vertical-align: middle; width: 100px; background-color: orange; border: 0px">Cancel <i class="fas fa-sign-in-alt"></i></button>
+						</span>
+						<input type="text" name="event_id" id="event{{event.event_id}}" value="{{event.event_id}}" hidden="">
+						<input type="text" name="user_id" id="event{{event.event_id}}" value="{{user_id}}" hidden="">
+					</div>
+
+				</div>
+			</div>
+		</form>
+		{% endfor %}
+	</div>
+
+	<script>
+		var myvar = '<!-- Card -->' +
+			'            <div class="col-lg-3 col-md-6 mb-4" >' +
+			'              <div class="card card-cascade narrower mb-5">' +
+			'' +
+			'                <!-- Card image -->' +
+			'                <div class="view view-cascade overlay d-flex justify-content-center">' +
+			'                  <img src="https://mdbootstrap.com/img/Mockups/Horizontal/6-col/pro-profile-page.jpg" class="img-fluid"' +
+			'                    alt="">' +
+			'                  <a href="#">' +
+			'                    <div class="mask"></div>' +
+			'                  </a>' +
+			'                </div>' +
+			'' +
+			'                <!-- Card content -->' +
+			'                <div class="card-body card-body-cascade">' +
+			'' +
+			'                  <!-- Title -->' +
+			'                  <h4 class="card-title">Project name</h4>' +
+			'' +
+			'                  <!-- Text -->' +
+			'                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the' +
+			'                    card\'s' +
+			'                    content.' +
+			'                  </p>' +
+			'' +
+			'                </div>' +
+			'' +
+			'                <!-- Card footer -->' +
+			'                <div class="card-footer links-light">' +
+			'                  <span class="float-left pt-2">' +
+			'                    <a><i class="fas fa-long-arrow-alt-up green-text"></i> 1</a>' +
+			'                    <a><i class="fas fa-long-arrow-alt-down red-text"></i> 10</a>' +
+			'                  </span>' +
+			'                  <span class="float-right">' +
+			'                    <a href="" class="waves-effect p-2">Comments <i class="far fa-comment-alt"></i></a>' +
+			'                  </span>' +
+			'                </div>' +
+			'' +
+			'             </div>' +
+			'              </div>' +
+			'              <!-- Card -->';
+
+
+		// for (var i = 0; i < 7; i++)
+		//   $("#demo").append(myvar);
+
+	</script>
+
+
+	<!-- Pagination -->
+	<nav class="mb-4 d-flex justify-content-center">
+
+		<ul class="pagination pagination-circle pg-blue mb-0">
+
+			<!-- First -->
+			<li class="page-item disabled clearfix d-none d-md-block">
+
+				<a class="page-link waves-effect waves-effect">First</a>
+
+			</li>
+
+			<!-- Arrow left -->
+			<li class="page-item disabled">
+
+				<a class="page-link waves-effect waves-effect" aria-label="Previous">
+
+					<span aria-hidden="true">«</span>
+
+					<span class="sr-only">Previous</span>
+
+				</a>
+
+			</li>
+			<!-- Numbers -->
+
+			<li class="page-item active">
+
+				<a class="page-link waves-effect waves-effect">1</a>
+
+			</li>
+
+			<li class="page-item">
+
+				<a class="page-link waves-effect waves-effect">2</a>
+
+			</li>
+
+			<li class="page-item">
+
+				<a class="page-link waves-effect waves-effect">3</a>
+
+			</li>
+
+			<li class="page-item">
+
+				<a class="page-link waves-effect waves-effect">4</a>
+
+			</li>
+
+			<li class="page-item">
+
+				<a class="page-link waves-effect waves-effect">5</a>
+
+			</li>
+
+			<!-- Arrow right -->
+			<li class="page-item">
+
+				<a class="page-link waves-effect waves-effect" aria-label="Next">
+
+					<span aria-hidden="true">»</span>
+
+					<span class="sr-only">Next</span>
+
+				</a>
+
+			</li>
+
+			<!-- First -->
+			<li class="page-item clearfix d-none d-md-block">
+
+				<a class="page-link waves-effect waves-effect">Last</a>
+
+			</li>
+
+		</ul>
+
+	</nav>
+	<!-- Pagination -->
+
+	<main>
+	</main>
+	<!-- Main layout -->
+
+	<!-- Footer -->
+	<footer class="page-footer pt-0  orange">
+
+		<!-- Copyright -->
+		<div class="footer-copyright py-3 text-center orange">
+			<div class="container-fluid" style="color: white">
+				© 2021 Copyright: <a href="#" target="_blank" style="font-weight:bold">Metro Events </a>
+			</div>
+		</div>
+
+	</footer>
+	<!-- Footer -->
+
+	<!-- SCRIPTS -->
+	<!-- JQuery -->
+	<script src="{% static 'administration/js/jquery-3.4.1.min.js' %}"></script>
+	<!-- Bootstrap tooltips -->
+	<script type="text/javascript" src="{% static 'administration/js/popper.min.js' %}"></script>
+	<!-- Bootstrap core JavaScript -->
+	<script type="text/javascript" src="{% static 'administration/js/bootstrap.js' %}"></script>
+	<!-- MDB core JavaScript -->
+	<script type="text/javascript" src="{% static 'administration/js/mdb.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'administration/js/Administrator.js' %}"></script>
+
+	<!-- Initializations -->
+	<script>
+		// SideNav Initialization
+		$(".button-collapse").sideNav();
+
+		var container = document.querySelector('.custom-scrollbar');
+		var ps = new PerfectScrollbar(container, {
+			wheelSpeed: 2,
+			wheelPropagation: true,
+			minScrollbarLength: 20
+		});
+
+	</script>
+
+
+
+</body>
+
+</html>
