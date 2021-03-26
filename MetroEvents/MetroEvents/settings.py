@@ -80,9 +80,9 @@ DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'metro',
-        'USER': 'metroevents5@metroevents5-db',
-        'PASSWORD': '@Metroevents00',
-        'HOST': 'metroevents5-db.mysql.database.azure.com',
+        'USER': 'db@metroevents-db',
+        'PASSWORD': 'yourpass',
+        'HOST': 'metroevents-db.mysql.database.azure.com',
         'PORT': '3306',
         'OPTIONS': {
         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -126,7 +126,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
