@@ -1,6 +1,6 @@
 # MetroEvents event system using Django and Javascript
 
-***Note: you need to have your own database, This project is not yet fully completed, you can add anything you want***
+***Note: you need to have your own database, This project is not fully completed, you can add anything you want***
 
 ## Landing Page
 ![alt text](https://raw.githubusercontent.com/kaizerxcx/MetroEvents/main/Landing%20Page.png?token=AQFWOUUZ34TZQZ64JWMYT3LAM4J2Q)
