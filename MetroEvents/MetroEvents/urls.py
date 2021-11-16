@@ -24,5 +24,5 @@ urlpatterns = [
     path('administration/', include('administration.urls', namespace='administration')),
     path('organizer/', include('organizer.urls', namespace='organizer')),
     path("admin/", AdminView.as_view(), name="admin_view"),
-
+    path('api/', include('api.urls')),
 ]
